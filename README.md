@@ -66,3 +66,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Project Members
 Student ID: i6433383
+
+## UML Modules
+
+The models cover the follwoing systems:
+
+- *Alert Generation System* : A system that generate Alerts on specified ThresholdRules, and informs the medical staff.
+- *Data Storage System* : A system that stores all patient data, allowing safe and secure retrival based on access level, and whether the data had not been scrubbed yet.
+- *Patient Identification System* : A system that allows for the identification of all hospital patients, includes anomoly detection and error handling. 
+- *Data Access Layer* : A system that handles how the data flows into storage, and parses it. 
+
+Access can be found here: https://github.com/luciet-afk/signal_project/tree/97f9fcd7d1b4cfb46b764a53f4055e2169d39665/uml_models

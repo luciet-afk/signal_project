@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The {@code AlertGenerator} class is responsible for monitoring patient data
+ * The AlertGenerator class is responsible for monitoring patient data
  * and generating alerts when certain predefined conditions are met. This class
- * relies on a {@link DataStorage} instance to access patient data and evaluate
+ * relies on a DataStorage instance to access patient data and evaluate
  * it against specific health criteria.
  */
 public class AlertGenerator {
@@ -20,17 +20,20 @@ public class AlertGenerator {
     private DataStorage dataStorage;
     private List<Alert> triggeredAlerts = new ArrayList<>();
 
+    private AlertFactory bpFactory = new BloodPressureAlertFactory();
+    private AlertFactory boFactory = new BloodOxygenAlertFactory();
+    private AlertFactory ecgFactory = new ECGAlertFactory();
+
     public List<Alert> getTriggeredAlerts() {
         return triggeredAlerts;
     }
 
     /**
-     * Constructs an {@code AlertGenerator} with a specified {@code DataStorage}.
-     * The {@code DataStorage} is used to retrieve patient data that this class
+     * Constructs an AlertGenerator with a specified DataStorage.
+     * The DataStorage is used to retrieve patient data that this class
      * will monitor and evaluate.
      *
-     * @param dataStorage the data storage system that provides access to patient
-     *                    data
+     * @param dataStorage the data storage system that provides access to patient data.
      */
     public AlertGenerator(DataStorage dataStorage) {
         this.dataStorage = dataStorage;
@@ -38,10 +41,8 @@ public class AlertGenerator {
 
     /**
      * Evaluates the specified patient's data to determine if any alert conditions
-     * are met. If a condition is met, an alert is triggered via the
-     * {@link #triggerAlert}
-     * method. This method should define the specific conditions under which an
-     * alert
+     * are met. If a condition is met, an alert is triggered via the triggerAlert
+     * method. This method should define the specific conditions under which an alert
      * will be triggered.
      *
      * @param patient the patient data to evaluate for alert conditions
@@ -50,7 +51,7 @@ public class AlertGenerator {
         List<PatientRecord> records = dataStorage.getRecords(patient.getPatientId(), Long.MIN_VALUE, Long.MAX_VALUE);
 
         checkBPAlerts(patient, records);
-        checkBloodSaturationAlerts(patient, records);
+        checkBloodOxygenAlerts(patient, records);
         checkHypotensiveHypoxemia(patient, records);
         checkECGAlerts(patient, records);
     }
@@ -80,7 +81,8 @@ public class AlertGenerator {
     }
 
     /**
-     * Checks the BP values (systolic, diastoic) and calls onto the two different alert types (BPTrned, and CriticalThreshold). 
+     * Checks the BP values (systolic, diastoic) and calls onto the two different alert types 
+     * (BPTrned, and CriticalThreshold). 
      * @param patient the given patient.
      * @param records this patient's records.
      */
@@ -112,7 +114,7 @@ public class AlertGenerator {
             boolean decreasing = (firstRecord - secondRecord > 10) && (secondRecord - thirdRecord > 10);
 
             if (increasing) {
-                triggerAlert(new Alert(
+                triggerAlert(bpFactory.createAlert(
                     String.valueOf(patient.getPatientId()),
                     type + " Increasing Trend",
                     records.get(i).getTimestamp()
@@ -120,7 +122,7 @@ public class AlertGenerator {
             }
 
             if (decreasing) {
-                triggerAlert(new Alert(
+                triggerAlert(bpFactory.createAlert(
                     String.valueOf(patient.getPatientId()),
                     type + " Decreasing Trend",
                     records.get(i).getTimestamp()
@@ -142,14 +144,14 @@ public class AlertGenerator {
             double value = record.getMeasurementValue();
             if (value > 180) {
 
-                triggerAlert(new Alert(
+                triggerAlert(bpFactory.createAlert(
                     String.valueOf(patient.getPatientId()), 
                     "Systolic BP Critical High", 
                     record.getTimestamp()
                 ));
 
             } else if (value < 90) {
-                triggerAlert(new Alert(
+                triggerAlert(bpFactory.createAlert(
                     String.valueOf(patient.getPatientId()), 
                     "Systolic BP Critical Low", 
                     record.getTimestamp()
@@ -162,13 +164,13 @@ public class AlertGenerator {
             double value = record.getMeasurementValue();
 
             if (value > 120) {
-                triggerAlert(new Alert(
+                triggerAlert(bpFactory.createAlert(
                     String.valueOf(patient.getPatientId()), 
                     "Diastolic BP Critical High", 
                     record.getTimestamp()
                 ));
             } else if (value < 60) {
-                triggerAlert(new Alert(
+                triggerAlert(bpFactory.createAlert(
                     String.valueOf(patient.getPatientId()), 
                     "Diastolic BP Critical Low", 
                     record.getTimestamp()
@@ -178,11 +180,12 @@ public class AlertGenerator {
     }
 
     /**
-     * Checks whether the BloodSat values are below 92 or if the drop is above or equal to 5 in the past 10 minutes.
+     * Checks whether the Blood Oxyen values are below 92 or if the drop is above or equal 
+     * to 5 in the past 10 minutes.
      * @param patient the given patient.
      * @param records this patient's records.
      */
-    private void checkBloodSaturationAlerts(Patient patient, List<PatientRecord> records){
+    private void checkBloodOxygenAlerts(Patient patient, List<PatientRecord> records){
 
         List<PatientRecord> satRecords = filterByType(records, "Saturation");
         satRecords.sort((a, b) -> Long.compare(a.getTimestamp(), b.getTimestamp()));
@@ -191,7 +194,7 @@ public class AlertGenerator {
             double value = satRecords.get(i).getMeasurementValue();
 
             if (value < 92) {
-                triggerAlert(new Alert(
+                triggerAlert(boFactory.createAlert(
                     String.valueOf(patient.getPatientId()),
                     "Low Blood Saturation",
                     satRecords.get(i).getTimestamp()
@@ -204,7 +207,7 @@ public class AlertGenerator {
 
                 double drop = value - satRecords.get(j).getMeasurementValue();
                 if (drop >= 5) {
-                    triggerAlert(new Alert(
+                    triggerAlert(boFactory.createAlert(
                         String.valueOf(patient.getPatientId()),
                         "Rapid Blood Saturation Drop",
                         satRecords.get(j).getTimestamp()
@@ -234,7 +237,7 @@ public class AlertGenerator {
 
                         if (timeDiff <= 60 * 1000) {
 
-                            triggerAlert(new Alert(
+                            triggerAlert(boFactory.createAlert(
                                 String.valueOf(patient.getPatientId()),
                                 "Hypotensive Hypoxemia",
                                 bpRecord.getTimestamp()
@@ -273,7 +276,7 @@ public class AlertGenerator {
 
             if (current > average * 2) {
 
-                triggerAlert(new Alert(
+                triggerAlert(ecgFactory.createAlert(
                     String.valueOf(patient.getPatientId()),
                     "Abnormal ECG Peak",
                     ecgRecords.get(i).getTimestamp()

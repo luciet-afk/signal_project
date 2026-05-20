@@ -14,14 +14,35 @@ import com.alerts.AlertGenerator;
  * patient IDs.
  */
 public class DataStorage {
+
+    private static DataStorage instance;
+
     private Map<Integer, Patient> patientMap; // Stores patient objects indexed by their unique patient ID.
 
     /**
      * Constructs a new instance of DataStorage, initializing the underlying storage
      * structure.
      */
-    public DataStorage() {
+    private DataStorage() {
         this.patientMap = new HashMap<>();
+    }
+
+    /**
+     * Returns a single instance of Data Storage, creating it if it does not exist yet. 
+     * @return the instance of Data Storage.
+     */
+    public static DataStorage getInstance() {
+        if (instance == null) {
+            instance = new DataStorage();
+        }
+        return instance;
+    }
+
+    /**
+     * Resets the singleton instance. Used for testing purposes only.
+     */
+    public static void resetInstance() {
+        instance = null;
     }
 
     /**
@@ -87,7 +108,7 @@ public class DataStorage {
     public static void main(String[] args) throws IOException {
         // DataReader is not defined in this scope, should be initialized appropriately.
         DataReader reader = new FileDataReader("output");
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance(); //modified to fit the Singleton design pattern
 
         // Assuming the reader has been properly initialized and can read data into the
         // storage

@@ -20,6 +20,7 @@ class FileDataReaderTest {
 
     @BeforeEach
     void setup() {
+        DataStorage.resetInstance();
         new File(TEST_FILE).mkdir();
     }
 
@@ -34,14 +35,13 @@ class FileDataReaderTest {
 
     @Test
     void testReadValidFile() throws IOException {
-        // write a test file in the expected format
         File file = new File(TEST_FILE + "/test.txt");
         try (FileWriter fw = new FileWriter(file)) {
             fw.write("Patient ID: 1, Timestamp: 1000, Label: HeartRate, Data: 78.0\n");
             fw.write("Patient ID: 1, Timestamp: 2000, Label: HeartRate, Data: 82.0\n");
         }
 
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
         new FileDataReader(TEST_FILE).readData(storage);
 
         List<PatientRecord> records = storage.getRecords(1, 0L, Long.MAX_VALUE);
@@ -52,21 +52,19 @@ class FileDataReaderTest {
     @Test
     void testInvalidDirectory() {
         FileDataReader reader = new FileDataReader("nonexistent_dir");
-        DataStorage storage = new DataStorage();
-
+        DataStorage storage = DataStorage.getInstance();
         assertThrows(IOException.class, () -> reader.readData(storage));
     }
 
     @Test
     void testMalformedLinesSkipped() throws IOException {
- 
         File file = new File(TEST_FILE + "/malformed.txt");
         try (FileWriter fw = new FileWriter(file)) {
             fw.write("Patient ID: 1, Timestamp: 1000, Label: HeartRate, Data: 78.0\n");
             fw.write("this is not valid data\n");
         }
-        
-        DataStorage storage = new DataStorage();
+
+        DataStorage storage = DataStorage.getInstance();
         new FileDataReader(TEST_FILE).readData(storage);
 
         List<PatientRecord> records = storage.getRecords(1, 0L, Long.MAX_VALUE);

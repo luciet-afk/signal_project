@@ -1,4 +1,8 @@
-package com.alerts;
+package com.alerts.factory_pattern;
+
+import com.alerts.Alert;
+import com.alerts.BloodPressureAlert;
+
 /**
  * The factory that creates an instance of BloodPressureAlert. Implements the AlertFactory
  * triggered when the predefined conditions of abnormal blood pressure are triggered.

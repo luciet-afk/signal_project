@@ -19,7 +19,7 @@ public class FileDataReader implements DataReader {
 
     /**
      * This method is responsible forvparsing the given DataStorage file/directory. These results are 
-     * then stored in the dataStorage. 
+     * then stored in the DataStorage. 
      * @param dataStorage the storage where the data will be stored.
      * @throws IOException if the file is not found.
      */
@@ -47,7 +47,8 @@ public class FileDataReader implements DataReader {
     }
 
     /**
-     * This helper method is responsible for parsing/reading the given file, then adds each record into dataStorage.
+     * This helper method is responsible for parsing/reading the given file, 
+     * then adds each record into DataStorage.
      * @param file the file to be parsed.
      * @param dataStorage this is the dataStorage where results will be returned to.
      * @throws IOException if a line is formatted wrong.

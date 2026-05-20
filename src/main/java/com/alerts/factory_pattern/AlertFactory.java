@@ -1,4 +1,6 @@
-package com.alerts;
+package com.alerts.factory_pattern;
+
+import com.alerts.Alert;
 
 /**
  * The Factory interface for the creation of an instance of an Alert.

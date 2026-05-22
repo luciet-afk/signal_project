@@ -7,6 +7,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Outputs patient health data to label-specific text files within a base directory. Each data label 
+ * is written to its own file, with new entries appended on each output call.
+ */
 public class FileOutputStrategy implements OutputStrategy {
 
     //Changed BaseDirectory to baseDirectory per camelCase.
@@ -21,6 +25,14 @@ public class FileOutputStrategy implements OutputStrategy {
         this.baseDirectory = baseDirectory;
     }
 
+    /**
+     * Writes patient health data to a file corresponding to the given label. The file is created if it does 
+     * not exist, and data is appended otherwise.
+     * @param patientId the ID of the patient the data belongs to
+     * @param timestamp the time at which the data was generated, in milliseconds
+     * @param label the type of health data, used as the output filename
+     * @param data the value or content of the health data
+     */
     @Override
     public void output(int patientId, long timestamp, String label, String data) {
         try {

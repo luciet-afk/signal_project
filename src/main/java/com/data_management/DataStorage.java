@@ -107,7 +107,7 @@ public class DataStorage {
      */
     public static void main(String[] args) throws IOException {
         // DataReader is not defined in this scope, should be initialized appropriately.
-        DataReader reader = new FileDataReader("output");
+        DataReader reader = new WebSocketClientReader("ws://localhost:8080");
         DataStorage storage = DataStorage.getInstance(); //modified to fit the Singleton design pattern
 
         // Assuming the reader has been properly initialized and can read data into the

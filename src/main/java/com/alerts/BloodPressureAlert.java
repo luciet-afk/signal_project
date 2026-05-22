@@ -4,7 +4,7 @@ package com.alerts;
  * or low readings, or a consistent increasing/decreasing trend. This is then produced by the 
  * BloodPressureAlertFactory.
  */
-public class BloodPressureAlert extends Alert {
+public class BloodPressureAlert extends BaseAlert {
 
     public BloodPressureAlert(String patientId, String condition, long timestamp) {
         super(patientId, condition, timestamp);

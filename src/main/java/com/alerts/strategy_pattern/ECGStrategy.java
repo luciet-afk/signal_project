@@ -9,6 +9,10 @@ import com.alerts.factory_pattern.ECGAlertFactory;
 import com.data_management.Patient;
 import com.data_management.PatientRecord;
 
+/**
+ * A strategy that monitors ECG readings, triggering alerts when a peak exceeds twice the average of 
+ * the previous five readings.
+ */
 public class ECGStrategy implements AlertStrategy{
 
     private AlertFactory ecgFactory = new ECGAlertFactory();

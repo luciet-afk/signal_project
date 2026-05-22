@@ -9,6 +9,12 @@ import com.alerts.factory_pattern.BloodPressureAlertFactory;
 import com.data_management.Patient;
 import com.data_management.PatientRecord;
 
+/**
+ * A strategy that monitors blood pressure readings, triggering alerts for consistent 
+ * increasing or decreasing trends and critical threshold levels in both systolic and 
+ * diastolic pressure.
+ */
+
 public class BloodPressureStrategy implements AlertStrategy {
 
     private AlertFactory bpFactory = new BloodPressureAlertFactory();

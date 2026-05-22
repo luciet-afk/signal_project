@@ -15,11 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The AlertGenerator class is responsible for monitoring patient data
- * and generating alerts when certain predefined conditions are met. This class
- * relies on a DataStorage instance to access patient data and evaluate
- * it against specific health criteria.
+ * Responsible for monitoring patient data and generating alerts when certain predefined conditions are met. 
+ * Alert logic is then passed on to AlertStrategy implementations.
  */
+
 public class AlertGenerator {
 
     private DataStorage dataStorage;

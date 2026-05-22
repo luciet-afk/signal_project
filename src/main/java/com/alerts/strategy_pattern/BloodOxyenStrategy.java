@@ -9,6 +9,11 @@ import com.alerts.factory_pattern.BloodOxygenAlertFactory;
 import com.data_management.Patient;
 import com.data_management.PatientRecord;
 
+/**
+ * A strategy that monitors blood oxygen saturation levels, triggering alerts
+ * when saturation drops below 92% or falls by 5% or more within a 10-minute window.
+ */
+
 public class BloodOxyenStrategy implements AlertStrategy{
 
     private AlertFactory boFactory = new BloodOxygenAlertFactory();

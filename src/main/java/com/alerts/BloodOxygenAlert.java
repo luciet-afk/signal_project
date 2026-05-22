@@ -5,7 +5,7 @@ package com.alerts;
  * rapid drop in oxygen levels. This is then produced by the BloodOxygenAlertFactory.
  */
 
-public class BloodOxygenAlert extends Alert {
+public class BloodOxygenAlert extends BaseAlert {
 
     public BloodOxygenAlert(String patientId, String condition, long timestamp) {
         super(patientId, condition, timestamp);

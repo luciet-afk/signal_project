@@ -8,6 +8,11 @@ import com.data_management.PatientRecord;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A strategy that monitors for hypotensive hypoxemia, triggering an alert when systolic blood 
+ * pressure drops below 90 mmHg and oxygen saturation falls below 92% within the same 60-second window.
+ */
+
 public class HypotensiveHypoxemiaStrategy implements AlertStrategy {
 
     private AlertFactory boFactory = new BloodOxygenAlertFactory();

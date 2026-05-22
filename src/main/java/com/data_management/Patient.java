@@ -5,8 +5,7 @@ import java.util.List;
 
 /**
  * Represents a patient and manages their medical records.
- * This class stores patient-specific data, allowing for the addition and
- * retrieval
+ * This class stores patient-specific data, allowing for the addition and retrieval
  * of medical records based on specified criteria.
  */
 public class Patient {

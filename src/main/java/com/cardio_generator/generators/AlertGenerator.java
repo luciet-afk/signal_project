@@ -4,6 +4,11 @@ import java.util.Random;
 
 import com.cardio_generator.outputs.OutputStrategy;
 
+/**
+ * Generates simulated alert events for patients. Models alert triggering and 
+ * resolution using probability-based logic, where alerts are triggered using an exponential distribution 
+ * and resolved with a fixed probability.
+*/
 public class AlertGenerator implements PatientDataGenerator {
 
     //Changed from public to private to perserve encapsulation.
@@ -16,6 +21,13 @@ public class AlertGenerator implements PatientDataGenerator {
         alertStates = new boolean[patientCount + 1];
     }
 
+    /**
+     * Generates an alert event for the specified patient and outputs the result.
+     * If an alert is active, there is a 90% chance it resolves each period.
+     * If no alert is active, a new one may be triggered based on an exponential probability model.
+     * @param patientId the ID of the patient to generate an alert event for
+     * @param outputStrategy the strategy used to output the generated alert data
+     */
     @Override
     public void generate(int patientId, OutputStrategy outputStrategy) {
         try {
